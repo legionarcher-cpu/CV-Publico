@@ -1,0 +1,433 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Curriculum Vitae</title>
+<style>
+  /* Paleta medianoche: azul marino y negro, suave */
+  :root{
+    --tinta:#16233D; --tinta-clara:#24385E; --oro:#3B6FB6; --oro-oscuro:#2C5A99;
+    --crema:#0F1729; --marfil:#EEF1F6; --papel:#DDE3EC; --blanco:#F6F8FB;
+    --texto:#141B26; --gris:#55606E; --borde:#B9C3D2; --campo-borde:#C3CBD7;
+    --suave:#E6ECF5; --insignia:#8FB3E8; --verde:#2E8150; --rojo:#A12B1E;
+    --sans:'Segoe UI',Roboto,Arial,sans-serif; --campo:2.35rem;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:radial-gradient(1100px 600px at 85% -10%, #1C2C4D 0%, transparent 60%), var(--crema);
+    background-attachment:fixed;color:var(--texto);font:1rem/1.45 var(--sans)}
+  .pagina{max-width:82rem;margin:0 auto;padding:1rem}
+
+  /* Cabeza de la sección */
+  .seccion-cabeza{display:flex;flex-wrap:wrap;gap:.6rem 1rem;align-items:flex-end;justify-content:space-between;margin-bottom:.9rem}
+  .seccion-cabeza h2{margin:0;font-size:1.3rem;color:#E8EDF5}
+  .seccion-cabeza p{margin:.15rem 0 0;color:#AEB9C9;font-size:.9rem;max-width:46rem}
+  .acciones-top{display:flex;gap:.45rem}
+
+  /* Controles */
+  label{display:block;margin-bottom:.65rem;font-weight:600;font-size:.87rem;color:var(--tinta)}
+  input,select{display:block;width:100%;min-height:var(--campo);margin-top:.2rem;padding:.35rem .6rem;border:1px solid var(--campo-borde);
+    border-radius:.35rem;background:#fff;color:#1F2C33;font:400 .95rem var(--sans)}
+  input::placeholder{color:#6B7680}
+  input:focus-visible,select:focus-visible,button:focus-visible{outline:2px solid var(--oro);outline-offset:1px}
+  button{min-height:var(--campo);padding:.35rem .95rem;border:0;border-radius:.35rem;background:var(--tinta);color:var(--blanco);
+    font:600 .9rem var(--sans);cursor:pointer}
+  button:hover{background:var(--tinta-clara)}
+  button.secundario{background:var(--blanco);color:var(--tinta);border:1px solid var(--campo-borde)}
+  button.secundario:hover{background:var(--papel)}
+  button.dorado{background:var(--oro)}
+  button.dorado:hover{background:var(--oro-oscuro)}
+  button.chico{min-height:1.95rem;padding:.15rem .6rem;font-size:.82rem}
+  .tarjeta{background:var(--blanco);border:1px solid #2A3A5C;border-radius:.6rem;box-shadow:0 6px 22px rgba(0,0,0,.35)}
+
+  /* Zona: formulario | hoja */
+  .zona{display:grid;grid-template-columns:24rem minmax(0,1fr);gap:1rem;align-items:start}
+  .form{position:sticky;top:.75rem;max-height:calc(100dvh - 1.5rem);overflow:auto;padding:1rem}
+
+  /* Pestañas numeradas */
+  .pestanas{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,6.8rem),1fr));gap:.35rem;margin-bottom:1rem;padding:.4rem;
+    border:1px solid var(--borde);border-radius:.55rem;background:var(--papel)}
+  .pestanas button{position:relative;display:flex;align-items:center;gap:.45rem;min-height:2.4rem;padding:.35rem .5rem;border:1px solid var(--borde);
+    border-radius:.4rem;background:var(--blanco);color:var(--tinta);font-size:.8rem;font-weight:600;text-align:left;line-height:1.2;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+  .pestanas button b{flex:none;display:grid;place-items:center;width:1.45rem;height:1.45rem;border-radius:50%;border:1.5px solid var(--tinta);font-size:.74rem}
+  .pestanas button:hover{border-color:var(--tinta);background:var(--suave)}
+  .pestanas button[aria-selected="true"]{background:var(--tinta);border-color:var(--tinta);color:#F1F4F9;box-shadow:0 2px 6px rgba(0,0,0,.2)}
+  .pestanas button[aria-selected="true"] b{background:var(--insignia);border-color:var(--insignia);color:#0F1729}
+  .pestanas button[aria-selected="true"]::after{content:"";position:absolute;left:50%;bottom:-.45rem;transform:translateX(-50%);
+    border:.4rem solid transparent;border-top-color:var(--tinta);border-bottom:0}
+
+  .grupo[hidden]{display:none}
+  .grupo h3{margin:0 0 .7rem;font-size:1rem;color:var(--tinta)}
+  .fila2{display:grid;grid-template-columns:1fr 1fr;gap:0 .6rem}
+  .fila2 > label{min-width:0}
+  .foto-campo{display:flex;gap:.7rem;align-items:center;margin-bottom:.9rem;padding:.55rem .7rem;border:1px solid var(--borde);border-radius:.4rem;background:var(--marfil)}
+  .foto-campo .mini{flex:none;width:2.8rem;height:3.6rem;border:1px dashed var(--borde);border-radius:.25rem;background:#fff center/cover no-repeat}
+  .foto-campo .info{flex:1;min-width:0;font-size:.85rem;font-weight:600;color:var(--tinta)}
+  .foto-campo .info small{display:block;font-weight:400;color:var(--gris)}
+  .foto-campo .botones{display:flex;flex-direction:column;gap:.3rem}
+  .ayuda{display:block;font-weight:400;font-size:.8rem;color:var(--gris);margin:-.3rem 0 .7rem}
+
+  /* Puntos de cada lista */
+  .punto{display:flex;gap:.35rem;align-items:center;margin-bottom:.45rem}
+  .punto .n{flex:none;width:1.4rem;text-align:right;font-size:.8rem;font-weight:700;color:var(--gris)}
+  .punto input{margin:0}
+  .punto .quitar{flex:none;min-height:0;width:2rem;height:var(--campo);padding:0;background:var(--blanco);color:var(--rojo);border:1px solid var(--campo-borde);font-size:1.05rem}
+  .punto .quitar:hover{background:#FAE7E4}
+  .agregar{width:100%;margin-top:.2rem;border:1px dashed var(--tinta);background:transparent;color:var(--tinta)}
+  .agregar:hover{background:var(--papel)}
+
+  /* Anterior / Siguiente */
+  .nav{display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin:.9rem 0 .6rem;padding-top:.6rem;border-top:1px dashed var(--borde)}
+  .nav span{font-size:.8rem;opacity:.75;white-space:nowrap}
+  .nav button[hidden]{display:block;visibility:hidden}
+
+  /* Lo que falta */
+  .faltan{margin:.5rem 0 0;padding:.55rem .7rem;border-radius:.4rem;background:var(--papel);border-left:3px solid var(--oro);font-size:.88rem}
+  .faltan.listo{border-left-color:var(--verde)}
+  .faltan button{margin:.25rem .25rem 0 0;padding:.1rem .5rem;min-height:0;border:1px solid var(--oro);border-radius:1rem;background:transparent;color:inherit;font-size:.8rem;font-weight:500}
+  .faltan button:hover{background:var(--suave)}
+
+  /* Vista de la hoja */
+  .vista{overflow-x:auto;padding:.9rem;background:#18233A;border:1px solid #2A3A5C;border-radius:.5rem;min-width:0}
+  .hoja{box-shadow:0 4px 18px rgba(0,0,0,.45) !important}
+
+  /* ===== Hoja: formato del machote "Curriculum Vitae Machote.docx" ===== */
+  .hoja{width:21.59cm;min-height:27.94cm;margin:0 auto;background:#fff;color:#000;box-shadow:0 2px 10px rgba(0,0,0,.14);
+    padding:2.6cm 3cm 2.8cm 2.95cm;font-family:Arial,Helvetica,sans-serif;font-size:11pt;line-height:1.5}
+  .hoja .encabezado{display:flow-root}
+  .hoja .raya-azul{height:1px;background:#5B9BD5;max-width:12.6cm;margin:0 auto}
+  /* Foto tamaño pasaporte (opcional), arriba a la derecha */
+  .hoja .foto{float:right;width:3.5cm;height:4.5cm;margin:0 0 .3cm .6cm;object-fit:cover;border:1px solid #9aa5b5}
+  .hoja .foto-vacia{display:flex;align-items:center;justify-content:center;text-align:center;border:1px dashed #9aa5b5;
+    color:#8792a3;font-size:9pt;line-height:1.3}
+  .hoja h1{font-weight:700;font-size:16pt;color:#002060;text-align:center;margin:8px 0 10px;text-decoration:underline;text-underline-offset:4px}
+  .hoja h2{font-weight:700;font-size:12pt;text-align:center;margin:18px 0 8px;break-after:avoid}
+  .hoja .raya-azul + h2{margin-top:16px}
+  .hoja .datos p{margin:0 0 7px}
+  .hoja ul{margin:0;padding-left:1.3cm;list-style:square}
+  .hoja li{margin-bottom:6px;break-inside:avoid}
+  .blank{background:#fff3b0}
+
+  .saltos{display:none}
+  @media (max-width:90rem){ .zona{grid-template-columns:22rem minmax(0,1fr)} }
+  @media (max-width:62rem){
+    .zona{grid-template-columns:1fr;padding-bottom:3.5rem}
+    .form{position:static;max-height:none}
+    .nav span{display:none}
+    .saltos{display:flex;gap:.4rem;position:fixed;right:1rem;bottom:1rem;z-index:20}
+    .saltos button{box-shadow:0 4px 14px rgba(0,0,0,.25)}
+    input,select{font-size:16px}
+  }
+
+  /* Impresión: solo la hoja; lo amarillo sale como rayas para llenar a mano */
+  @page{size:letter;margin:2.4cm 3cm 2.4cm 2.95cm}
+  @media print{
+    body{background:#fff}
+    .seccion-cabeza,.form,.saltos{display:none !important}
+    .pagina{padding:0;max-width:none}
+    .zona{display:block}
+    .vista{padding:0;border:0;background:none;overflow:visible}
+    .hoja{box-shadow:none !important;margin:0;min-height:0;width:auto;padding:0}
+    .blank{background:none}
+    .foto-vacia{display:none !important}
+  }
+</style>
+</head>
+<body>
+<div class="pagina">
+
+  <div class="seccion-cabeza">
+    <div>
+      <h2>Machote · Curriculum Vitae</h2>
+      <p>Llene los datos y la hoja se arma sola. Lo resaltado en amarillo falta por llenar; si se imprime así, sale con rayas para completarlo a mano.</p>
+    </div>
+    <div class="acciones-top">
+      <button type="button" class="secundario" id="btnLimpiar">Limpiar</button>
+      <button type="button" class="dorado" id="btnPdf">Imprimir / Guardar PDF</button>
+    </div>
+  </div>
+
+  <div class="zona">
+    <form class="form tarjeta" id="form" autocomplete="off" onsubmit="return false">
+      <div class="pestanas" id="pestanas" role="tablist"></div>
+
+      <!-- 1. Información personal -->
+      <div class="grupo" data-g="0">
+        <h3>Información personal</h3>
+        <div class="foto-campo">
+          <div class="mini" id="fotoMini"></div>
+          <div class="info">Foto tamaño pasaporte<small>Opcional. Si no sube una, no sale en el PDF.</small></div>
+          <div class="botones">
+            <button type="button" class="chico" id="btnFoto">Subir foto</button>
+            <button type="button" class="secundario chico" id="btnQuitarFoto" hidden>Quitar</button>
+          </div>
+          <input type="file" id="archivoFoto" accept="image/*" hidden>
+        </div>
+        <label>Nombre completo <input data-k="nombre" placeholder="Nombre y apellidos"></label>
+        <div class="fila2">
+          <label>Cédula <input data-k="cedula" placeholder="0-0000-0000"></label>
+          <label>Sexo
+            <select data-k="sexo"><option value="">Elija…</option><option>Masculino</option><option>Femenino</option></select>
+          </label>
+        </div>
+        <div class="fila2">
+          <label>Fecha de nacimiento <input type="date" data-k="nacimiento"></label>
+          <label>Edad <input data-k="edad" placeholder="Se calcula sola"></label>
+        </div>
+        <div class="fila2">
+          <label>Estado civil
+            <select data-k="civil"><option value="">Elija…</option><option>Soltero(a)</option><option>Casado(a)</option><option>Unión libre</option><option>Divorciado(a)</option><option>Viudo(a)</option></select>
+          </label>
+          <label>Licencia de conducir <input data-k="licencia" placeholder="B1, A2… / No posee"></label>
+        </div>
+        <div class="fila2">
+          <label>Teléfono <input data-k="telefono" inputmode="tel" placeholder="0000-0000"></label>
+          <label>Correo <input data-k="correo" type="email" placeholder="correo@ejemplo.com"></label>
+        </div>
+      </div>
+
+      <!-- 2 a 5. Listas -->
+      <div class="grupo" data-g="1" data-lista="formacion" hidden>
+        <h3>Formación académica y otros títulos</h3>
+        <small class="ayuda">Un título o curso por punto. Ej.: Bachillerato en Educación Media — Liceo de …, 2015</small>
+        <div class="puntos"></div>
+        <button type="button" class="agregar chico">+ Agregar punto</button>
+      </div>
+      <div class="grupo" data-g="2" data-lista="experiencia" hidden>
+        <h3>Experiencia laboral</h3>
+        <small class="ayuda">Ej.: Cajero — Supermercado X (2019 a 2023)</small>
+        <div class="puntos"></div>
+        <button type="button" class="agregar chico">+ Agregar punto</button>
+      </div>
+      <div class="grupo" data-g="3" data-lista="cualidades" hidden>
+        <h3>Cualidades y conocimientos</h3>
+        <small class="ayuda">Ej.: Responsable · Trabajo en equipo · Excel intermedio</small>
+        <div class="puntos"></div>
+        <button type="button" class="agregar chico">+ Agregar punto</button>
+      </div>
+      <div class="grupo" data-g="4" data-lista="recomendaciones" hidden>
+        <h3>Recomendaciones</h3>
+        <small class="ayuda">Ej.: Juan Pérez — Supervisor, Empresa X — 8888-8888</small>
+        <div class="puntos"></div>
+        <button type="button" class="agregar chico">+ Agregar punto</button>
+      </div>
+
+      <div class="nav">
+        <button type="button" class="secundario chico" id="ant">← Anterior</button>
+        <span id="paso"></span>
+        <button type="button" class="chico" id="sig">Siguiente →</button>
+      </div>
+      <div class="faltan" id="faltan" role="status"></div>
+    </form>
+
+    <div class="vista" id="vista">
+      <div class="hoja" id="hoja"></div>
+    </div>
+  </div>
+
+  <div class="saltos">
+    <button type="button" class="dorado chico" id="irHoja">Ver la hoja</button>
+    <button type="button" class="secundario chico" id="irForm">Volver al formulario</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  var CLAVE = 'cv-machote-v2';
+  var GRUPOS = ['Información personal','Formación','Experiencia','Cualidades','Recomendaciones'];
+  var LISTAS = {
+    formacion:{titulo:'Formación Académica y Otros Títulos', inicial:3},
+    experiencia:{titulo:'Experiencia Laboral', inicial:3},
+    cualidades:{titulo:'Cualidades y Conocimientos', inicial:4},
+    recomendaciones:{titulo:'Recomendaciones', inicial:3}
+  };
+  var DATOS = [
+    ['nombre','Nombre'],['cedula','Cédula'],['sexo','Sexo'],['nacimiento','Fecha Nacimiento'],['edad','Edad'],
+    ['civil','Estado civil'],['licencia','Licencia de Conducir'],['telefono','Teléfono'],['correo','Correo']
+  ];
+  var $ = function(id){ return document.getElementById(id); };
+  var form = $('form'), actual = 0, foto = '';
+
+  function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function V(v, rayas){ v = String(v||'').trim(); return v ? esc(v) : '<span class="blank">' + (rayas||'______________________________') + '</span>'; }
+  function fechaCR(iso){ var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso||''); return m ? m[3]+'/'+m[2]+'/'+m[1] : ''; }
+
+  /* ---------- Puntos de las listas ---------- */
+  function renumerar(caja){ caja.querySelectorAll('.punto .n').forEach(function(n,i){ n.textContent = (i+1)+'.'; }); }
+  function punto(caja, texto){
+    var d = document.createElement('div'); d.className = 'punto';
+    d.innerHTML = '<span class="n"></span><input maxlength="300"><button type="button" class="quitar" title="Quitar punto" aria-label="Quitar punto">×</button>';
+    d.querySelector('input').value = texto || '';
+    d.querySelector('.quitar').onclick = function(){
+      if (caja.children.length > 1) d.remove(); else d.querySelector('input').value = '';
+      renumerar(caja); cambio();
+    };
+    caja.appendChild(d); renumerar(caja);
+    return d.querySelector('input');
+  }
+  form.querySelectorAll('[data-lista]').forEach(function(g){
+    var caja = g.querySelector('.puntos');
+    g.querySelector('.agregar').onclick = function(){ punto(caja,'').focus(); cambio(); };
+    caja.addEventListener('keydown', function(e){
+      if (e.key === 'Enter' && e.target.tagName === 'INPUT'){
+        e.preventDefault();
+        var nuevo = punto(caja,''); caja.insertBefore(nuevo.parentNode, e.target.parentNode.nextSibling);
+        renumerar(caja); nuevo.focus(); cambio();
+      }
+    });
+  });
+
+  /* ---------- Leer y guardar ---------- */
+  function leer(){
+    var d = { campos:{}, listas:{}, foto:foto };
+    form.querySelectorAll('[data-k]').forEach(function(el){ d.campos[el.dataset.k] = el.value.trim(); });
+    form.querySelectorAll('[data-lista]').forEach(function(g){
+      d.listas[g.dataset.lista] = Array.prototype.map.call(g.querySelectorAll('.punto input'), function(i){ return i.value.trim(); });
+    });
+    return d;
+  }
+  function cargar(d){
+    d = d || { campos:{}, listas:{} };
+    ponerFoto(d.foto || '');
+    form.querySelectorAll('[data-k]').forEach(function(el){ el.value = d.campos[el.dataset.k] || ''; });
+    form.querySelectorAll('[data-lista]').forEach(function(g){
+      var caja = g.querySelector('.puntos'), items = d.listas[g.dataset.lista];
+      caja.innerHTML = '';
+      if (!items || !items.length) items = new Array(LISTAS[g.dataset.lista].inicial).fill('');
+      items.forEach(function(t){ punto(caja, t); });
+    });
+  }
+
+  /* ---------- Armar la hoja ---------- */
+  function pintar(d){
+    var c = d.campos, h = '';
+    if (d.foto) h += '<img class="foto" alt="Foto" src="' + d.foto + '">';
+    h += '<div class="encabezado"><div class="raya-azul"></div><h1>Curriculum Vitae</h1><div class="raya-azul"></div></div>';
+    h += '<h2>Información Personal</h2><div class="datos">';
+    DATOS.forEach(function(x){
+      var v = x[0] === 'nacimiento' ? fechaCR(c.nacimiento) : c[x[0]];
+      h += '<p>' + x[1] + ': ' + V(v) + '</p>';
+    });
+    h += '</div>';
+    Object.keys(LISTAS).forEach(function(k){
+      var items = d.listas[k] || [], llenos = items.filter(Boolean);
+      h += '<h2>' + LISTAS[k].titulo + '</h2><ul>';
+      (llenos.length ? llenos : ['','']).forEach(function(t){
+        h += '<li>' + V(t, '________________________________________________') + '</li>';
+      });
+      h += '</ul>';
+    });
+    $('hoja').innerHTML = h;
+  }
+
+  /* ---------- Lo que falta ---------- */
+  function faltantes(d){
+    var f = [];
+    DATOS.forEach(function(x){ if (!d.campos[x[0]]) f.push({ etiqueta:x[1], g:0, k:x[0] }); });
+    Object.keys(LISTAS).forEach(function(k, i){
+      if (!(d.listas[k] || []).some(Boolean)) f.push({ etiqueta:GRUPOS[i+1], g:i+1 });
+    });
+    return f;
+  }
+  function pintarFaltan(d){
+    var caja = $('faltan'), f = faltantes(d);
+    caja.classList.toggle('listo', !f.length);
+    caja.textContent = f.length ? 'Falta por llenar: ' : 'Todo está lleno.';
+    f.forEach(function(x){
+      var b = document.createElement('button'); b.type = 'button'; b.textContent = x.etiqueta;
+      b.onclick = function(){
+        ir(x.g);
+        var el = x.k ? form.querySelector('[data-k="'+x.k+'"]') : form.querySelector('[data-g="'+x.g+'"] .punto input');
+        if (el) el.focus();
+      };
+      caja.appendChild(b);
+    });
+  }
+
+  /* ---------- Pestañas ---------- */
+  GRUPOS.forEach(function(t, i){
+    var b = document.createElement('button'); b.type = 'button'; b.setAttribute('role','tab');
+    b.innerHTML = '<b>' + (i+1) + '</b><span>' + t + '</span>';
+    b.onclick = function(){ ir(i); };
+    $('pestanas').appendChild(b);
+  });
+  function ir(i){
+    actual = Math.max(0, Math.min(GRUPOS.length-1, i));
+    form.querySelectorAll('.grupo').forEach(function(g){ g.hidden = +g.dataset.g !== actual; });
+    $('pestanas').querySelectorAll('button').forEach(function(b, j){ b.setAttribute('aria-selected', j === actual); });
+    $('ant').hidden = actual === 0;
+    $('sig').hidden = actual === GRUPOS.length-1;
+    $('paso').textContent = 'Parte ' + (actual+1) + ' de ' + GRUPOS.length;
+  }
+  $('ant').onclick = function(){ ir(actual-1); };
+  $('sig').onclick = function(){ ir(actual+1); };
+
+  /* ---------- Foto: se recorta a 3,5 × 4,5 y se achica para guardarla ---------- */
+  function ponerFoto(src){
+    foto = src || '';
+    $('fotoMini').style.backgroundImage = foto ? 'url("' + foto + '")' : '';
+    $('btnQuitarFoto').hidden = !foto;
+    $('btnFoto').textContent = foto ? 'Cambiar' : 'Subir foto';
+  }
+  $('btnFoto').onclick = function(){ $('archivoFoto').click(); };
+  $('btnQuitarFoto').onclick = function(){ ponerFoto(''); cambio(); };
+  $('archivoFoto').onchange = function(){
+    var f = this.files && this.files[0]; this.value = '';
+    if (!f || !/^image\//.test(f.type)) return;
+    var lector = new FileReader();
+    lector.onload = function(){
+      var img = new Image();
+      img.onload = function(){
+        var W = 420, H = 540, c = document.createElement('canvas'); c.width = W; c.height = H;
+        var esc = Math.max(W / img.width, H / img.height), w = img.width * esc, h = img.height * esc;
+        var ctx = c.getContext('2d'); ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+        ctx.drawImage(img, (W - w) / 2, (H - h) / 2, w, h);
+        ponerFoto(c.toDataURL('image/jpeg', 0.88)); cambio();
+      };
+      img.onerror = function(){ alert('No se pudo leer esa imagen. Pruebe con una JPG o PNG.'); };
+      img.src = lector.result;
+    };
+    lector.readAsDataURL(f);
+  };
+
+  /* ---------- Edad automática ---------- */
+  function calcularEdad(){
+    var v = form.querySelector('[data-k="nacimiento"]').value; if (!v) return;
+    var p = v.split('-'), n = new Date(), a = n.getFullYear() - (+p[0]);
+    if (n.getMonth()+1 < +p[1] || (n.getMonth()+1 === +p[1] && n.getDate() < +p[2])) a--;
+    if (a >= 0 && a < 120) form.querySelector('[data-k="edad"]').value = a + ' años';
+  }
+
+  /* ---------- Cambios ---------- */
+  function cambio(){
+    var d = leer();
+    pintar(d); pintarFaltan(d);
+    try { localStorage.setItem(CLAVE, JSON.stringify(d)); } catch(e){}
+  }
+  form.addEventListener('input', function(e){
+    if (e.target.dataset && e.target.dataset.k === 'nacimiento') calcularEdad();
+    cambio();
+  });
+  form.addEventListener('change', cambio);
+
+  $('btnLimpiar').onclick = function(){
+    if (!confirm('¿Borrar todo lo llenado en el CV?')) return;
+    try { localStorage.removeItem(CLAVE); } catch(e){}
+    cargar(null); ir(0); cambio();
+  };
+  $('btnPdf').onclick = function(){
+    var n = form.querySelector('[data-k="nombre"]').value.trim(), t = document.title;
+    document.title = 'CV' + (n ? '_' + n.replace(/\s+/g,'_') : '');
+    window.print();
+    setTimeout(function(){ document.title = t; }, 800);
+  };
+  $('irHoja').onclick = function(){ $('vista').scrollIntoView({ behavior:'smooth' }); };
+  $('irForm').onclick = function(){ form.scrollIntoView({ behavior:'smooth' }); };
+
+  var guardado = null;
+  try { guardado = JSON.parse(localStorage.getItem(CLAVE)); } catch(e){}
+  cargar(guardado); ir(0); cambio();
+})();
+</script>
+</body>
+</html>
