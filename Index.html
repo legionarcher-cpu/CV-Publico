@@ -14,6 +14,8 @@
     --sans:'Segoe UI',Roboto,Arial,sans-serif; --campo:2.35rem;
   }
   *{box-sizing:border-box}
+  [hidden]{display:none !important}
+  .nav button[hidden]{display:block !important;visibility:hidden}
   body{margin:0;background:radial-gradient(1100px 600px at 85% -10%, #1C2C4D 0%, transparent 60%), var(--crema);
     background-attachment:fixed;color:var(--texto);font:1rem/1.45 var(--sans)}
   .pagina{max-width:82rem;margin:0 auto;padding:1rem}
@@ -57,7 +59,18 @@
     border:.4rem solid transparent;border-top-color:var(--tinta);border-bottom:0}
 
   .grupo[hidden]{display:none}
-  .grupo h3{margin:0 0 .7rem;font-size:1rem;color:var(--tinta)}
+  .grupo h3{display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin:0 0 .7rem;font-size:1rem;color:var(--tinta)}
+  .grupo h3 .boton-ampliar{flex:none;display:flex;align-items:center;gap:.3rem;min-height:1.85rem;padding:.1rem .6rem;font-size:.8rem}
+  .boton-ampliar svg{width:.95rem;height:.95rem}
+
+  /* Ventana para escribir en grande */
+  dialog.ventana.escribir{width:min(60rem,calc(100vw - 1rem));height:min(92dvh,52rem)}
+  .escribir-cuerpo{flex:1;display:flex;flex-direction:column;gap:.45rem;padding:.8rem;background:var(--blanco);min-height:0}
+  .escribir-cuerpo .ayuda{margin:0}
+  .escribir-cuerpo textarea{flex:1;width:100%;min-height:12rem;resize:none;padding:.8rem;border:1px solid var(--campo-borde);border-radius:.35rem;
+    background:#fff;color:#1F2C33;font:400 1rem/1.6 var(--sans)}
+  .escribir-cuerpo textarea:focus-visible{outline:2px solid var(--oro);outline-offset:1px}
+  .escribir-cuerpo .contador{font-size:.8rem;color:var(--gris);text-align:right}
   .fila2{display:grid;grid-template-columns:1fr 1fr;gap:0 .6rem}
   .fila2 > label{min-width:0}
   .foto-campo{display:flex;gap:.7rem;align-items:center;margin-bottom:.9rem;padding:.55rem .7rem;border:1px solid var(--borde);border-radius:.4rem;background:var(--marfil)}
@@ -79,7 +92,6 @@
   /* Anterior / Siguiente */
   .nav{display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin:.9rem 0 .6rem;padding-top:.6rem;border-top:1px dashed var(--borde)}
   .nav span{font-size:.8rem;opacity:.75;white-space:nowrap}
-  .nav button[hidden]{display:block;visibility:hidden}
 
   /* Lo que falta */
   .faltan{margin:.5rem 0 0;padding:.55rem .7rem;border-radius:.4rem;background:var(--papel);border-left:3px solid var(--oro);font-size:.88rem}
@@ -88,7 +100,22 @@
   .faltan button:hover{background:var(--suave)}
 
   /* Vista de la hoja */
-  .vista{overflow-x:auto;padding:.9rem;background:#18233A;border:1px solid #2A3A5C;border-radius:.5rem;min-width:0}
+  .vista{position:relative;overflow-x:auto;padding:.9rem;background:#18233A;border:1px solid #2A3A5C;border-radius:.5rem;min-width:0}
+  /* Ampliar: botón fijo arriba de la hoja */
+  .lupa{position:sticky;top:.5rem;z-index:2;display:flex;align-items:center;gap:.35rem;margin:0 0 .6rem auto;min-height:0;padding:.3rem .7rem;box-shadow:0 2px 8px rgba(0,0,0,.35)}
+  .lupa svg{width:1rem;height:1rem}
+
+  /* Ventana de Ampliar */
+  dialog.ventana{width:calc(100vw - 1rem);max-width:none;height:calc(100dvh - 1rem);max-height:none;padding:0;border:1px solid #2A3A5C;
+    border-radius:.6rem;background:#18233A;color:var(--texto);overflow:hidden}
+  dialog.ventana[open]{display:flex;flex-direction:column}
+  dialog.ventana::backdrop{background:rgba(5,9,18,.7)}
+  .ventana-cabeza{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;padding:.55rem .75rem;background:var(--tinta);color:#F1F4F9}
+  .ventana-cabeza h2{flex:1;margin:0;font-size:1rem}
+  .zoom{display:flex;align-items:center;gap:.3rem}
+  .zoom span{min-width:3.4rem;text-align:center;font-weight:600;font-size:.85rem}
+  .ventana-cabeza button{min-height:2rem}
+  .lupa-cuerpo{flex:1;overflow:auto;padding:1rem .5rem}
   .hoja{box-shadow:0 4px 18px rgba(0,0,0,.45) !important}
 
   /* ===== Hoja: formato del machote "Curriculum Vitae Machote.docx" ===== */
@@ -97,7 +124,7 @@
   .hoja .encabezado{display:flow-root}
   .hoja .raya-azul{height:1px;background:#5B9BD5;max-width:12.6cm;margin:0 auto}
   /* Foto tamaño pasaporte (opcional), arriba a la derecha */
-  .hoja .foto{float:right;width:3.5cm;height:4.5cm;margin:0 0 .3cm .6cm;object-fit:cover;border:1px solid #9aa5b5}
+  .hoja .foto{float:left;width:3.5cm;height:4.5cm;margin:0 .6cm .3cm 0;object-fit:cover;border:1px solid #9aa5b5}
   .hoja .foto-vacia{display:flex;align-items:center;justify-content:center;text-align:center;border:1px dashed #9aa5b5;
     color:#8792a3;font-size:9pt;line-height:1.3}
   .hoja h1{font-weight:700;font-size:16pt;color:#002060;text-align:center;margin:8px 0 10px;text-decoration:underline;text-underline-offset:4px}
@@ -111,12 +138,25 @@
   .saltos{display:none}
   @media (max-width:90rem){ .zona{grid-template-columns:22rem minmax(0,1fr)} }
   @media (max-width:62rem){
-    .zona{grid-template-columns:1fr;padding-bottom:3.5rem}
+    .zona{grid-template-columns:minmax(0,1fr);padding-bottom:3.5rem}
     .form{position:static;max-height:none}
     .nav span{display:none}
     .saltos{display:flex;gap:.4rem;position:fixed;right:1rem;bottom:1rem;z-index:20}
     .saltos button{box-shadow:0 4px 14px rgba(0,0,0,.25)}
     input,select{font-size:16px}
+  }
+  /* Teléfonos */
+  @media (max-width:40rem){
+    .pagina{padding:.6rem}
+    .seccion-cabeza h2{font-size:1.15rem}
+    .acciones-top{width:100%}
+    .acciones-top button{flex:1}
+    .form{padding:.75rem}
+    .fila2{grid-template-columns:1fr}
+    .vista{padding:.5rem}
+    .pestanas button{font-size:.76rem;padding:.3rem .4rem}
+    .ventana-cabeza h2{flex-basis:100%}
+    .zoom{flex:1}
   }
 
   /* Impresión: solo la hoja; lo amarillo sale como rayas para llenar a mano */
@@ -127,7 +167,8 @@
     .pagina{padding:0;max-width:none}
     .zona{display:block}
     .vista{padding:0;border:0;background:none;overflow:visible}
-    .hoja{box-shadow:none !important;margin:0;min-height:0;width:auto;padding:0}
+    .hoja{box-shadow:none !important;margin:0;min-height:0;width:auto;padding:0;zoom:1 !important}
+    dialog,.lupa{display:none !important}
     .blank{background:none}
     .foto-vacia{display:none !important}
   }
@@ -221,9 +262,41 @@
     </form>
 
     <div class="vista" id="vista">
+      <button type="button" class="secundario chico lupa" id="btnLupa" title="Ver la hoja en grande">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4M11 8v6M8 11h6"/></svg>
+        Ampliar
+      </button>
       <div class="hoja" id="hoja"></div>
     </div>
   </div>
+
+  <dialog class="ventana" id="dlgLupa" aria-labelledby="tLupa">
+    <div class="ventana-cabeza">
+      <h2 id="tLupa">Vista previa</h2>
+      <div class="zoom" role="group" aria-label="Tamaño">
+        <button type="button" class="secundario chico" id="lupaMenos" aria-label="Más pequeño">−</button>
+        <span id="lupaPct">100 %</span>
+        <button type="button" class="secundario chico" id="lupaMas" aria-label="Más grande">+</button>
+        <button type="button" class="secundario chico" id="lupaAjustar">Al ancho</button>
+      </div>
+      <button type="button" class="dorado chico" id="lupaCerrar">Cerrar</button>
+    </div>
+    <div class="lupa-cuerpo" id="lupaCuerpo"><div class="hoja" id="lupaHoja"></div></div>
+  </dialog>
+
+  <!-- Ampliar una sección: escribir los puntos con espacio, uno por renglón -->
+  <dialog class="ventana escribir" id="dlgEscribir" aria-labelledby="tEscribir">
+    <div class="ventana-cabeza">
+      <h2 id="tEscribir">Texto</h2>
+      <button type="button" class="dorado chico" id="escGuardar">Guardar</button>
+      <button type="button" class="secundario chico" id="escCerrar">Cerrar</button>
+    </div>
+    <div class="escribir-cuerpo">
+      <small class="ayuda" id="escAyuda"></small>
+      <textarea id="escTexto" spellcheck="true" aria-labelledby="tEscribir"></textarea>
+      <small class="contador" id="escCuenta"></small>
+    </div>
+  </dialog>
 
   <div class="saltos">
     <button type="button" class="dorado chico" id="irHoja">Ver la hoja</button>
@@ -277,6 +350,42 @@
     });
   });
 
+  /* ---------- Ampliar: escribir una sección en ventana grande ---------- */
+  var escGrupo = null;
+  var ICONO_AMPLIAR = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>';
+  function contarPuntos(){
+    var n = $('escTexto').value.split('\n').filter(function(t){ return t.trim(); }).length;
+    $('escCuenta').textContent = n === 1 ? '1 punto' : n + ' puntos';
+  }
+  form.querySelectorAll('[data-lista]').forEach(function(g){
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'secundario boton-ampliar';
+    b.title = 'Escribir esta sección en una ventana grande';
+    b.innerHTML = ICONO_AMPLIAR + 'Ampliar';
+    b.onclick = function(){
+      escGrupo = g;
+      $('tEscribir').textContent = g.querySelector('h3').firstChild.textContent.trim();
+      $('escAyuda').textContent = 'Un punto por renglón: Enter empieza un punto nuevo. ' + g.querySelector('.ayuda').textContent;
+      $('escTexto').value = Array.prototype.map.call(g.querySelectorAll('.punto input'), function(i){ return i.value.trim(); })
+        .filter(Boolean).join('\n');
+      contarPuntos();
+      $('dlgEscribir').showModal();
+      var t = $('escTexto'); t.focus(); t.setSelectionRange(t.value.length, t.value.length);
+    };
+    g.querySelector('h3').appendChild(b);
+  });
+  $('escTexto').addEventListener('input', contarPuntos);
+  $('escGuardar').onclick = function(){
+    if (!escGrupo) return;
+    var caja = escGrupo.querySelector('.puntos');
+    var lineas = $('escTexto').value.split('\n').map(function(t){ return t.replace(/\s+/g,' ').trim(); }).filter(Boolean);
+    caja.innerHTML = '';
+    (lineas.length ? lineas : ['']).forEach(function(t){ punto(caja, t); });
+    cambio();
+    $('dlgEscribir').close();
+  };
+  $('escCerrar').onclick = function(){ $('dlgEscribir').close(); };
+
   /* ---------- Leer y guardar ---------- */
   function leer(){
     var d = { campos:{}, listas:{}, foto:foto };
@@ -318,7 +427,39 @@
       h += '</ul>';
     });
     $('hoja').innerHTML = h;
+    if ($('dlgLupa').open) $('lupaHoja').innerHTML = h;
   }
+
+  /* ---------- La hoja se achica al ancho disponible (teléfonos) ---------- */
+  var ANCHO_HOJA = 0;
+  function anchoHoja(){
+    if (!ANCHO_HOJA){ var h = $('hoja'); h.style.zoom = 1; ANCHO_HOJA = h.offsetWidth || 816; }
+    return ANCHO_HOJA;
+  }
+  function libre(el){
+    var s = getComputedStyle(el);
+    return el.clientWidth - parseFloat(s.paddingLeft) - parseFloat(s.paddingRight);
+  }
+  function ajustarVista(){ $('hoja').style.zoom = Math.min(1, libre($('vista')) / anchoHoja()); }
+  window.addEventListener('resize', function(){ ajustarVista(); if ($('dlgLupa').open && lupaAlAncho) lupaAncho(); });
+
+  /* ---------- Ampliar: la hoja en grande, en ventana ---------- */
+  var lupaZ = 1, lupaAlAncho = true;
+  function lupaPoner(z){
+    lupaZ = Math.max(.3, Math.min(2.5, z));
+    $('lupaHoja').style.zoom = lupaZ;
+    $('lupaPct').textContent = Math.round(lupaZ * 100) + ' %';
+  }
+  function lupaAncho(){ lupaAlAncho = true; lupaPoner(Math.min(1.6, (libre($('lupaCuerpo')) - 4) / anchoHoja())); }
+  $('btnLupa').onclick = function(){
+    $('lupaHoja').innerHTML = $('hoja').innerHTML;
+    $('dlgLupa').showModal();
+    lupaAncho();
+  };
+  $('lupaMenos').onclick = function(){ lupaAlAncho = false; lupaPoner(lupaZ - .1); };
+  $('lupaMas').onclick = function(){ lupaAlAncho = false; lupaPoner(lupaZ + .1); };
+  $('lupaAjustar').onclick = lupaAncho;
+  $('lupaCerrar').onclick = function(){ $('dlgLupa').close(); };
 
   /* ---------- Lo que falta ---------- */
   function faltantes(d){
@@ -426,7 +567,7 @@
 
   var guardado = null;
   try { guardado = JSON.parse(localStorage.getItem(CLAVE)); } catch(e){}
-  cargar(guardado); ir(0); cambio();
+  cargar(guardado); ir(0); cambio(); ajustarVista();
 })();
 </script>
 </body>
